@@ -7,7 +7,7 @@ Instale o textual com
 e execute com ` python3 app.py `.
 
 Para transformar em interface web, instale o textual-dev com 
-``pip install textual``
+``pip install textual-dev``
 
 e crie um arquivo, por exemplo `webapp.py`, com
 

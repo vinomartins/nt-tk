@@ -15,6 +15,7 @@ from renderer import render
 from algorithms.gcd import gcd_with_steps
 from algorithms.xgcd import xgcd
 from algorithms.primo import primo 
+from algorithms.division import division
 
 # from algorithms.naive_factor import naive_factorization
 # from algorithms.fermat import fermat_factorization
@@ -53,6 +54,7 @@ class NumberTheoryLab(App):
         yield Header(show_clock=True)
         with Horizontal():
             self.menu = ListView(
+                ListItem(Static("Divisão euclidiana", name = "div")),
                 ListItem(Static("MDC (Alg. de Euclides)", name = "gcd")),
                 ListItem(Static("MDC extendido", name = "xgcd")),
                 ListItem(Static("Teste de primalidade", name = "primo")),
@@ -71,6 +73,9 @@ class NumberTheoryLab(App):
 
         if choice == "gcd":
             await self.run_gcd()
+
+        elif choice == "div":
+            await self.run_div()
 
         elif choice == "xgcd":
             self.run_xgcd()
@@ -104,6 +109,21 @@ class NumberTheoryLab(App):
         )
         
 
+    async def run_div(self):
+        def on_result(result):
+            logging.info(result)
+            if result is None:
+                return
+            a, b = result
+            data = division(a, b)
+            self.output.clear()
+            self.output.write(render(data))
+
+        await self.push_screen(
+            TwoIntInputDialog("Insira os valores de a e b (positivos)"),
+            on_result
+
+        )
     async def run_primo(self):
         logging.info("run_primo: inicio" )
         def on_result(result):

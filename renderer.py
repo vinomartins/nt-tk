@@ -18,9 +18,10 @@ def render(result: dict) -> str:
     lines.append("[b]Resultado[/b]")
     lines.append(result["result"])
     lines.append("")
-
-    lines.append("[b]Teoria[/b]")
-    lines.append(result["theory"])
+    
+    if result["theory"]:
+        lines.append("[b]Teoria[/b]")
+        lines.append(result["theory"])
 
     return "\n".join(lines)
 

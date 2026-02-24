@@ -16,6 +16,7 @@ from algorithms.gcd import gcd_with_steps
 from algorithms.xgcd import xgcd
 from algorithms.primo import primo 
 from algorithms.division import division
+from algorithms.fermat import fermat
 
 # from algorithms.naive_factor import naive_factorization
 # from algorithms.fermat import fermat_factorization
@@ -56,10 +57,11 @@ class NumberTheoryLab(App):
             self.menu = ListView(
                 ListItem(Static("Divisão euclidiana", name = "div")),
                 ListItem(Static("MDC (Alg. de Euclides)", name = "gcd")),
-                ListItem(Static("MDC extendido", name = "xgcd")),
                 ListItem(Static("Teste de primalidade", name = "primo")),
-                ListItem(Static("Fermat Factorization")),
-                ListItem(Static("Chinese Remainder Theorem")),
+                ListItem(Static("Fatoração por Fermat", name = "fermat")),
+                ListItem(Static("Inverso módulo m (n. impl)"), name = "inversomod"),
+                ListItem(Static("MDC extendido (n. impl)", name = "xgcd")),
+                ListItem(Static("Teorema Chinês dos Restos (n. impl)")),
             )
             yield self.menu
             self.output = OutputPanel()
@@ -77,12 +79,14 @@ class NumberTheoryLab(App):
         elif choice == "div":
             await self.run_div()
 
-        elif choice == "xgcd":
-            self.run_xgcd()
-
         elif choice == "primo":
             await self.run_primo()
 
+        elif choice == "fermat":
+            await self.run_fermat()
+
+        elif choice == "xgcd":
+            self.run_xgcd()
         # elif choice == "Naive Factorization":
         #     self.run_naive_factor()
         #
@@ -141,17 +145,30 @@ class NumberTheoryLab(App):
         )
 
 
-    def run_xgcd(self):
-        result = xgcd(240, 46)
-        self.output.update(render(result))
+    async def run_fermat(self):
+        logging.info("run_fermat: inicio" )
+        def on_result(result):
+            logging.info("run_fermat:", result)
+            if result is None:
+                return
+            p = result
+            data = fermat(p)
+            self.output.clear()
+            self.output.write(render(data))
+
+        await self.push_screen(
+            OneIntInputDialog("Insira o valor de n"),
+            on_result
+        )
+
+    # def run_xgcd(self):
+    #     result = xgcd(240, 46)
+    #     self.output.update(render(result))
 
     # def run_naive_factor(self):
     #     result = naive_factorization(360)
     #     self.output.update(render(result))
     #
-    # def run_fermat(self):
-    #     result = fermat_factorization(5959)
-    #     self.output.update(render(result))
     #
     # def run_crt(self):
     #     congruences = [(2, 3), (3, 5), (2, 7)]
